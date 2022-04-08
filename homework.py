@@ -1,6 +1,10 @@
 from typing import Dict, List, Type
-from dataclasses import dataclass, asdict #Взято со слак, не особо понятно
-@dataclass #Взято со слак, не особо понятно
+
+
+from dataclasses import dataclass, asdict
+
+
+@dataclass 
 
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -24,14 +28,14 @@ class InfoMessage:
                    f'Дистанция: {self.distance:.3f} км; '
                    f'Ср. скорость: {self.speed:.3f} км/ч; '
                    f'Потрачено ккал: {self.calories:.3f}.')
-        return message.format(**asdict(self)) #Взято со слак, не особо понятно
+        return message.format(**asdict(self))  #Взято со слак, не особо понятно
 
 
 class Training:
     """Базовый класс тренировки."""
 
-    M_IN_KM: int = 1000 #ввел константу
-    LEN_STEP: float = 0.65 #временно тут константа переменная
+    M_IN_KM: int = 1000
+    LEN_STEP: float = 0.65 
     
     def __init__(self,
                  action: int,
@@ -45,7 +49,6 @@ class Training:
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
         return self.action * self.LEN_STEP / self.M_IN_KM 
-
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
@@ -70,6 +73,7 @@ class Running(Training):
 
     COEFF_CALORIE_1: int = 18
     COEFF_CALORIE_2: int = 20 
+    
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
 
@@ -147,7 +151,7 @@ def read_package(workout_type: str, data: List) -> Training:
        'WLK': SportsWalking,
     }
     if workout_type in TICKER: 
-        result = TICKER[workout_type](*data)
+        result = TICKER[workout_type](*data) 
         return result 
 
 def main(training: Training) -> None:
