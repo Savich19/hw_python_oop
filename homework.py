@@ -55,11 +55,11 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        pass
+        raise NotImplementedError('<Не могу рассчитать калории ¯\_(ツ)_/¯>')
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        return InfoMessage(self.__class__.__name__,
+        return InfoMessage(type(self).__name__,
                            self.duration,
                            self.get_distance(),
                            self.get_mean_speed(),
@@ -72,6 +72,7 @@ class Running(Training):
 
     COEFF_CALORIE_1: int = 18
     COEFF_CALORIE_2: int = 20
+    H_IN_M: int = 60
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
@@ -81,7 +82,8 @@ class Running(Training):
                 - self.COEFF_CALORIE_2)
                 * self.weight
                 / self.M_IN_KM
-                * (self.duration * 60))
+                * (self.duration
+                * self.H_IN_M))
 
 
 class SportsWalking(Training):
@@ -89,6 +91,7 @@ class SportsWalking(Training):
 
     COEFF_CALORIE_1: float = 0.035
     COEFF_CALORIE_2: float = 0.029
+    H_IN_M: int = 60
 
     def __init__(self,
                  action: int,
@@ -107,7 +110,8 @@ class SportsWalking(Training):
                 + (self.get_mean_speed()**2 // self.height)
                 * self.COEFF_CALORIE_2
                 * self.weight)
-                * (self.duration * 60))
+                * (self.duration
+                * self.H_IN_M))
 
 
 class Swimming(Training):
@@ -153,6 +157,8 @@ def read_package(workout_type: str, data: List) -> Training:
     if workout_type in TICKER:
         result = TICKER[workout_type](*data)
         return result
+    else:
+        raise NotImplementedError('<Не могу понять тип вашей тренировки :(>')
 
 
 def main(training: Training) -> None:
